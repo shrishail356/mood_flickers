@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Loading Page</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+      perspective: 1000px;
+    }
+
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transform: translateZ(-1px) scale(2);
+      background-size: cover;
+    }
+
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #3498db;
+      border-radius: 50%;
+      border-top: 4px solid #e74c3c;
+      animation: spin 1s linear infinite; /* Animation for spinner */
+      margin-bottom: 10px;
+    }
+
+    #loading-text {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    .loading-gif img {
+      animation: pulse 2s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.1); }
+    }
+
+  </style>  
+
+</head>
+<body>
+
+  <div class="loading-container">
+    <div class="loading-gif">
+      <img src="{{ url_for('static', filename='images/f5baef4b6b6677020ab8d091ef78a3bc_w200.webp') }}" alt="Loading GIF">
+    </div>
+    <div class="loading-spinner"></div>
+    <div id="loading-text">Loading...</div>
+    <div id="loading-progress">0%</div>
+  </div>
+
+<script src="{{ url_for('static', filename='javascript/script.js') }}"></script>
+   
+</body>
+</html>

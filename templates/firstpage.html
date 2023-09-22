@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    
+    <style>
+      
+body{
+    background-image: url('/static/images/purplebg.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+    
+}
+.gradientbg{
+    background-image:linear-gradient(rgb(0, 0, 0),rgba(0, 0, 0, 0.745),rgba(0, 0, 0, 0)) ;
+    
+    height: 30rem;
+    /* background-color: white; */
+    
+}
+.navbar{
+    background-image:linear-gradient( rgb(0, 0, 0),rgba(9, 0, 18, 0));
+}
+.navbar-brand{
+    color: white;
+}
+.nav-link{
+    color: white;
+
+}
+.middlelogo{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    animation-name: logocolor;
+    animation-duration: 5s;
+    animation-iteration-count:infinite;
+    filter: drop-shadow(0.5rem 0.5rem 0.2rem rgba(109, 32, 198, 0.584));
+}
+@keyframes logocolor{
+    from{
+        filter: drop-shadow(0.5rem 0.5rem 0.2rem rgba(109, 32, 198, 0.584));
+    }
+    to{
+        filter: drop-shadow(0.5rem 0.5rem 0.2rem rgba(255, 46, 182, 0.791));
+    }
+}
+.btn-outline-light:hover{
+    background-color: rgba(215, 72, 255, 0.663);
+    color: white;
+    border: 1px solid rgba(215, 72, 255, 0.886);
+}
+.nav-link:hover{
+    color: rgba(215, 72, 255, 0.886);
+
+}
+
+.intro{
+    color: rgb(245, 234, 255);
+    margin:auto 5rem 5rem 5rem;
+    text-align: center;
+    font-size: x-large;
+    font-weight: 500;
+    margin-top: 2rem;
+}
+.start{
+    background-color: rgba(255, 255, 255, 0.886);
+    color: rgb(38, 0, 74);
+    /* border: 1px solid rgba(215, 72, 255, 0.886); */
+    display: block;
+    margin: auto auto 3rem auto;
+    width: 50%;
+
+
+}
+.start:hover{
+    background-color: rgba(195, 75, 255, 0.764);
+    color: rgb(255, 255, 255);
+    /* border: 1px solid rgba(215, 72, 255, 0.886); */
+    display: block;
+    margin: auto auto 3rem auto;
+    width: 60%;
+
+}
+
+
+
+/* Loader*/
+.loader_bg {
+    /*position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: translateZ(-1px) scale(4);
+    background-size: cover;*/
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover; /* Use background-size: cover to fill the screen */
+    z-index: 1000; 
+  }
+  
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #fff;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1001;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+  
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #3498db;
+      border-radius: 50%;
+      border-top: 4px solid #e74c3c;
+      animation: spin 1s linear infinite; /* Animation for spinner */
+      margin-bottom: 10px;
+    }
+  
+    #loading-text {
+      font-size: 24px;
+      font-weight: bold;
+    }
+  
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+  
+    .loading-gif img {
+  animation: pulse 2s infinite alternate;
+    }
+  
+  @keyframes pulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
+  }
+    </style>
+    <title>MoodFlickers</title>
+</head>
+<body>
+  <div class="gradientbg">
+     <nav class="navbar ">
+      <div class="container-fluid">
+          <span class="navbar-brand mb-0 h1"><img src="{{ url_for('static', filename='images/Screenshot_2023-09-18_223854-removebg-preview.png') }}" alt="company logo" width="100"></span>
+      <ul class="nav justify-content-end">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Features</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Enterprise</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Support</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Pricing</a>
+          </li>
+         
+          <button type="button" class="btn btn-outline-light">Sign up</button>
+        </ul>
+      </div>
+  </nav>
+  <img src="{{ url_for('static', filename='images/Screenshot_2023-09-18_223854-removebg-preview.png') }}" alt="logo here" width="500" class="middlelogo">
+</div>
+<p class="intro">Sentiment Analysis software for analyzing your social media content and providing constructive reviews. Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, ex odio iusto consectetur quas id delectus provident. Placeat exercitationem qui iste officiis rerum. Minima nihil ducimus repellendus veniam facilis similique iusto assumenda tenetur incidunt et cumque illo, doloribus illum. Commodi!</p>
+      
+<a href="{{ url_for('get_started') }}" class="btn start">GET STARTED</a>
+</body>
+</html>

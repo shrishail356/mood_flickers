@@ -1,0 +1,70 @@
+/* Reset some default styles for better consistency */
+body, h1, h2, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+/* Apply a background color to the body */
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Style the table */
+table {
+    border-collapse: collapse;
+    width: 80%;
+    margin: 20px auto;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+/* Style table headers */
+th {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 10px;
+    text-align: left;
+}
+
+/* Style table cells */
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+/* Style table rows on hover */
+tr:hover {
+    background-color: #f5f5f5;
+    transition: background-color 0.2s ease-in-out;
+}
+
+/* Style the SCORE cells with color based on sentiment */
+td:nth-child(2) {
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Style the SCORE cells with different colors for sentiment scores */
+td.positive {
+    color: #28a745;
+}
+
+td.neutral {
+    color: #6c757d;
+}
+
+td.negative {
+    color: #dc3545;
+}
+
+td.compound {
+    color: #007BFF;
+}
+
+/* Add a subtle animation to the SCORE cells */
+td:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s ease-in-out;
+}
+

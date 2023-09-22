@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+    crossorigin="anonymous"
+    />
+    <title>MoodFlickers</title>
+    <style>
+        /* Center the loading page */
+        .loader_bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .loading-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        body {
+    background-image: url('/static/images/purplebg.png'); /* Adjust the path accordingly */
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+/* Loader */
+.loader_bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: translateZ(-1px) scale(2);
+    background-size: cover;
+  }
+  
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+  
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #3498db;
+      border-radius: 50%;
+      border-top: 4px solid #e74c3c;
+      animation: spin 1s linear infinite; /* Animation for spinner */
+      margin-bottom: 10px;
+    }
+  
+    #loading-text {
+      font-size: 24px;
+      font-weight: bold;
+    }
+  
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+  
+    .loading-gif img {
+  animation: pulse 2s infinite alternate;
+    }
+  
+  @keyframes pulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
+  }
+
+    </style>
+
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+
+    <style>
+        form {
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            width: 400px;
+            margin: 0 auto;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Style for labels */
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+        
+        /* Style for select elements */
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        /* Style for text input elements */
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        /* Style for submit button */
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        input[type="submit"]:hover{
+            background-color: purple;
+            color: white;
+        }
+        
+        /* Style for hidden elements (initially hidden) */
+        .hidden {
+            display: none;
+        }
+        
+        /* Style for select options */
+        select option {
+            font-size: 16px;
+        }
+        
+        /* Style for nested select and input fields */
+        #instagramFields, #facebookFields {
+            margin-top: 20px;
+        }
+        
+        /* Style for nested labels */
+        #instagramFields label, #facebookFields label {
+            font-weight: normal;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="formsm">
+        <img
+            src="{{ url_for('static', filename='images/Screenshot_2023-09-18_223854-removebg-preview.png') }}"
+            alt="logo here"
+            width="150"
+            height="80"
+            id="logoc"
+        />
+        <form method="POST" action="/scrape">
+            <label for="platform">Select Social Media Platform:</label>
+            <select id="platform" name="platform">
+                <option value="" disabled selected>Select your option</option>
+                <option value="instagram">Instagram</option>
+                <option value="facebook">Facebook</option>
+                <option value="twitter">Twitter</option>
+            </select>
+
+            <div id="instagramFields" class="hidden">
+                <label for="instagramOption">Select an Instagram Option:</label>
+                <select id="instagramOption" name="instagramOption">
+                    <option value="none">Select One</option>
+                    <option value="comments">Comments</option>
+                    <option value="profile">Profile</option>
+                    <option value="hashtags">Hashtags</option>
+                    <option value="posts">Posts</option>
+                </select>
+                <br>
+                <div id="instagramComments" class="hidden">
+                    <label for="instagramCommentsURL">Posts URL for Comments:</label>
+                    <input type="url" id="instagramCommentsURL" name="instagramCommentsURL">
+                </div>
+                <div id="instagramProfile" class="hidden">
+                    <label for="instagramUsername">Instagram Username:</label>
+                    <input type="text" id="instagramUsername" name="instagramUsername">
+                </div>
+                <div id="instagramHashtags" class="hidden">
+                    <label for="instagramHashtagsInput">Hashtags:</label>
+                    <input type="text" id="instagramHashtagsInput" name="instagramHashtagsInput">
+                </div>
+                <div id="instagramPosts" class="hidden">
+                    <label for="instagramPostsURL">Posts URL:</label>
+                    <input type="url" id="instagramPostsURL" name="instagramPostsURL">
+                </div>
+            </div>
+
+                    <!-- Nested select tag for Facebook -->
+            <div id="facebookFields" class="hidden">
+                <label for="facebookOption">Select a Facebook Option:</label>
+                <select id="facebookOption" name="facebookOption">
+                    <option value="none">Select One</option>
+                    <option value="comments">Comments:</option>
+                    <option value="page">Page URL:</option>
+                    <option value="review">Review URL:</option>
+                    <option value="group">Group URL:</option>
+                </select>
+                <br>
+                <div id="facebookComments" class="hidden">
+                    <label for="facebookCommentsURL">Posts URL for Comments:</label>
+                    <input type="url" id="facebookCommentsURL" name="facebookCommentsURL">
+                </div>
+                <div id="facebookPage" class="hidden">
+                    <label for="facebookPageURL">Page URL:</label>
+                    <input type="url" id="facebookPageURL" name="facebookPageURL">
+                </div>
+                <div id="facebookReview" class="hidden">
+                    <label for="facebookReviewURL">Review URL:</label>
+                    <input type="url" id="facebookReviewURL" name="facebookReviewURL">
+                </div>
+                <div id="facebookGroup" class="hidden">
+                    <label for="facebookGroupURL">Group URL:</label>
+                    <input type="url" id="facebookGroupURL" name="facebookGroupURL">
+                </div>
+            </div>
+
+               <!--Nested selecttag for Twitter-->
+            <div id="twitterFields" class="hidden">
+                    <label for="twitterOption">Select a Twitter Option:</label>
+                    <select id="twitterOption" name="twitterOption">
+                        <option value="none">Select One</option>
+                        <option value="comments">Comments</option>
+                        <option value="page">Page URL</option>
+                    </select>
+                    <br>
+                    <div id="twitterComments" class="hidden">
+                        <label for="twitterCommentsURL">Posts URL for Comments:</label>
+                        <input type="text" id="twitterCommentsURL" name="twitterCommentsURL">
+                    </div>
+                    <div id="twitterPage" class="hidden">
+                        <label for="twitterPageURL">Page URL:</label>
+                        <input type="url" id="twitterPageURL" name="twitterPageURL">
+                    </div>
+            </div>
+            <br>
+
+            <input type="submit" value="Submit">
+
+        </form>
+    </div>
+    <!--Loader html-->
+    <div class="loader_bg" id="loader">
+        <div class="loading-container">
+            <div class="loading-gif">
+                <img src="{{ url_for('static', filename='images/f5baef4b6b6677020ab8d091ef78a3bc_w200.webp') }}" alt="Loading GIF" />
+            </div>
+            <div class="loading-spinner"></div>
+            <div id="loading-text">Loading... This may take up to 30 seconds</div>
+            <div id="loading-progress">0%</div>
+        </div>
+    </div>
+    <!--Loader HTML end-->
+
+    <script src="{{ url_for('static', filename='javascript/index.js') }}"></script>
+    <script>
+        document.getElementById("scrape-button").addEventListener("click", function () {
+            document.getElementById("loader").style.display = "block";
+        });
+    </script>
+
+    <script>
+        // JavaScript to show/hide input fields based on the selected platform and option
+        document.getElementById('platform').addEventListener('change', function() {
+            const platform = this.value;
+
+            // Hide all additional input fields and nested selects
+            document.getElementById('instagramFields').classList.add('hidden');
+            document.getElementById('facebookFields').classList.add('hidden');
+            document.getElementById('twitterFields').classList.add('hidden');
+
+            // Show the additional input fields based on the selected platform
+            if (platform === 'instagram') {
+                document.getElementById('instagramFields').classList.remove('hidden');
+            } else if (platform === 'facebook') {
+                document.getElementById('facebookFields').classList.remove('hidden');
+            } else if (platform === 'twitter') {
+                document.getElementById('twitterFields').classList.remove('hidden');
+            }
+        });
+
+        // JavaScript to show/hide nested input fields based on the selected Instagram option
+        document.getElementById('instagramOption').addEventListener('change', function() {
+            const instagramOption = this.value;
+
+            // Hide all nested input fields
+            document.getElementById('instagramComments').classList.add('hidden');            
+            document.getElementById('instagramProfile').classList.add('hidden');
+            document.getElementById('instagramHashtags').classList.add('hidden');
+            document.getElementById('instagramPosts').classList.add('hidden');
+
+            // Show the nested input fields based on the selected Instagram option
+            if (instagramOption === 'comments') {
+                document.getElementById('instagramComments').classList.remove('hidden');
+            } else if (instagramOption === 'profile') {
+                document.getElementById('instagramProfile').classList.remove('hidden');
+            } else if (instagramOption === 'hashtags') {
+                document.getElementById('instagramHashtags').classList.remove('hidden');
+            } else if (instagramOption === 'posts') {
+                document.getElementById('instagramPosts').classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('facebookOption').addEventListener('change', function() {
+            const facebookOption = this.value;
+
+            // Hide all nested input fields
+            document.getElementById('facebookComments').classList.add('hidden');
+            document.getElementById('facebookPage').classList.add('hidden');
+            document.getElementById('facebookReview').classList.add('hidden');
+            document.getElementById('facebookGroup').classList.add('hidden');
+
+            // Show the nested input fields based on the selected Facebook option
+            if (facebookOption === 'comments') {
+                document.getElementById('facebookComments').classList.remove('hidden');
+            } else if (facebookOption === 'page') {
+                document.getElementById('facebookPage').classList.remove('hidden');
+            } else if (facebookOption === 'review') {
+                document.getElementById('facebookReview').classList.remove('hidden');
+            } else if (facebookOption === 'group') {
+                document.getElementById('facebookGroup').classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('twitterOption').addEventListener('change', function() {
+            const twitterOption = this.value;
+
+            // Hide all nested input fields
+            document.getElementById('twitterComments').classList.add('hidden');
+            document.getElementById('twitterPage').classList.add('hidden');
+
+            // Show the nested input fields based on the selected Facebook option
+            if (twitterOption === 'comments') {
+                document.getElementById('twitterComments').classList.remove('hidden');
+            } else if (twitterOption === 'page') {
+                document.getElementById('twitterPage').classList.remove('hidden');
+            }
+        });
+    </script>
+
+
+
+</body>
+</html>

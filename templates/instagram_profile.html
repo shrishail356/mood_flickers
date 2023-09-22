@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .profile-card {
+            width: 300px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: top;
+            margin-right: 20px;
+        }
+
+        .profile-card-header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .profile-card-content {
+            padding: 10px;
+            text-align: center;
+        }
+        .profile-card-content1 {
+            padding: 10px;
+            text-align: center;
+            color: grey;
+        }
+
+
+        .profile-card:hover {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        #toggle-table-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        #toggle-table-button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        #toggle-table-button:focus {
+            outline: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            border-right: 1px solid #ddd; 
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        .not-applicable {
+            color: #999;
+        }
+
+        .visit-post-button {
+            display: inline-block;
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .visit-post-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Instagram Profile</h1>
+    <div class="container">
+        <!-- First Line: Average Likes, Average Comments, and Engagement Rate -->
+        <div class="cards">
+            <div class="profile-card">
+                <div class="profile-card-header" style="background-color: transparent;">
+                    <img src="{{ url_for('static', filename='images/like_icon.png') }}" alt="Like Icon" width="50">
+                </div>
+                <div class="profile-card-content" style="font-size: 24px; color: #333;">
+                    {{ average_likes }}
+                </div>
+                <div class="profile-card-content1" style="font-size: 12px;">
+                    Avg. Likes 
+                </div>
+                <div class="profile-card-content1" style="font-size: 12px;">
+                    since last 30 posts
+                </div>
+            </div>
+            <div class="profile-card">
+                <div class="profile-card-header" style="background-color: transparent;">
+                    <img src="{{ url_for('static', filename='images/comment_icon.gif') }}" alt="Comment Icon" width="50">
+                </div>
+                <div class="profile-card-content" style="font-size: 24px; color: #333;">
+                    {{ average_comments }}
+                </div>
+                <div class="profile-card-content1" style="font-size: 12px;">
+                    Avg. Comments 
+                </div>
+                <div class="profile-card-content1" style="font-size: 12px;">
+                    since last 30 posts
+                </div>
+            </div>
+            <div class="profile-card">
+                <div class="profile-card-header" style="background-color: transparent;">
+                    <img src="{{ url_for('static', filename='images/engagement_icon.png') }}" alt="Engagement Icon" width="50">
+                </div>
+                <div class="profile-card-content" style="font-size: 24px; color: #333;">
+                    {{ engagement_rate|round(2) }} %
+                </div>
+                <div class="profile-card-content1" style="font-size: 12px;">
+                    Engagement rate 
+                </div>
+                <div class="profile-card-content1" style="font-size: 12px;">
+                    since last 30 posts
+                </div>
+            </div>
+        </div>
+    
+        <!-- Second Line: Likes per Post and Comments per Post -->
+        <div class="cards">
+            <!-- Likes per Post Card -->
+            <div class="profile-card" style="width: 600px; height: 500px;">
+                <div class="profile-card-header">
+                    <h3>Likes per Post</h3>
+                </div>
+                <div class="profile-card-content">
+                    <canvas id="likes-per-post-chart" width="600" height="350"></canvas>
+                </div>
+            </div>
+            
+            <!-- Comments per Post Card -->
+            <div class="profile-card" style="width: 600px; height: 500px;">
+                <div class="profile-card-header">
+                    <h3>Comments per Post</h3>
+                </div>
+                <div class="profile-card-content">
+                    <canvas id="comments-per-post-chart" width="600" height="350"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="text-align: center;">
+        <button id="toggle-table-button">View your Data</button>
+    </div>
+    </div>
+    
+
+    <!-- The table to display the scraped data -->
+    <table id="scraped_data">
+        <thead>
+            <tr>
+                <th>Slno</th>
+                <th>URL</th>
+                <th>Caption</th>
+                <th>Comments Count</th>
+                <th>First Comment</th>
+                <th>Likes Count</th>
+                <th>Hashtags</th>
+                <th>Timestamp</th>
+                <th>Owner Username</th>
+                <th>Type</th>
+                <th>Video Duration</th>
+                <th>Video Play Count</th>
+                <th>Video View Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for index, row in data.iterrows() %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>
+                        <a class="visit-post-button" href="{{ row['url'] }}" target="_blank">Visit Post</a>
+                    </td>
+                    <td>{{ row['caption'] }}</td>
+                    <td>{{ row['commentsCount'] }}</td>
+                    <td>{{ row['firstComment'] }}</td>
+                    <td>{{ row['likesCount'] }}</td>
+                    <td>{{ row['hashtags'] }}</td>
+                    <td>{{ row['timestamp'] }}</td>
+                    <td>{{ row['ownerUsername'] }}</td>
+                    <td>{{ row['type'] }}</td>
+                    <td>
+                        {% if row['type'] == 'Video' %}
+                            {{ row['videoDuration'] }}
+                        {% else %}
+                            <span class="not-applicable">Not Applicable</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if row['type'] == 'Video' %}
+                            {{ row['videoPlayCount'] }}
+                        {% else %}
+                            <span class="not-applicable">Not Applicable</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if row['type'] == 'Video' %}
+                            {{ row['videoViewCount'] }}
+                        {% else %}
+                            <span class="not-applicable">Not Applicable</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>        
+    </table>
+
+    <!-- JavaScript to toggle the table visibility -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const toggleTableButton = document.getElementById('toggle-table-button');
+        const table = document.getElementById('scraped_data');
+
+        toggleTableButton.addEventListener('click', () => {
+            if (table.style.display === 'none') {
+                table.style.display = 'table';
+            } else {
+                table.style.display = 'none';
+            }
+        });
+
+        // Escape Jinja2 variable using `|tojson|safe`
+        const likesData = JSON.parse('{{ likes_data|tojson|safe }}');
+        const likesLabels = Array.from({length: likesData.length}, (_, i) => `Post ${i + 1}`);
+
+        // Escape Jinja2 variable using `|tojson|safe`
+        const commentsData = JSON.parse('{{ comments_data|tojson|safe }}');
+
+        // Create Likes per Post Chart
+        const likesPerPostChart = new Chart('likes-per-post-chart', {
+            type: 'bar',
+            data: {
+                labels: likesLabels,
+                datasets: [{
+                    label: 'Likes per Post',
+                    data: likesData,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Create Comments per Post Chart
+        const commentsPerPostChart = new Chart('comments-per-post-chart', {
+            type: 'bar',
+            data: {
+                labels: likesLabels,
+                datasets: [{
+                    label: 'Comments per Post',
+                    data: commentsData,
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

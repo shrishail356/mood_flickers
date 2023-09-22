@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Scraper</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        select,
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Social Media Scraper</h1>
+    <form method="POST" action="/scrape">
+        <label for="platform">Select Social Media Platform:</label>
+        <select id="platform" name="platform">
+            <option value="instagram">Instagram</option>
+            <option value="facebook">Facebook</option>
+            <option value="twitter">Twitter</option>
+        </select>
+        <label for="content_type">Select Type of Content:</label>
+        <select id="content_type" name="content_type"></select>
+        <div id="dynamic_input"></div>
+        <button type="submit">Scrape</button>
+    </form>
+    <table id="scraped_data" style="display: none;"></table>
+
+    <script>
+        const platformDropdown = document.getElementById('platform');
+        const contentTypeDropdown = document.getElementById('content_type');
+        const dynamicInput = document.getElementById('dynamic_input');
+        const contentOptions = {
+            instagram: ['comments', 'posts', 'overview', 'profile'],
+            facebook: ['comments', 'pages'],
+            twitter: ['profiles']
+        };
+
+        function updateContentOptions() {
+            const selectedPlatform = platformDropdown.value;
+            const options = contentOptions[selectedPlatform] || [];
+
+            contentTypeDropdown.innerHTML = '';
+            options.forEach(option => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option;
+                optionElement.textContent = option;
+                contentTypeDropdown.appendChild(optionElement);
+            });
+        }
+        function showInputFields() {
+            const selectedContent = contentTypeDropdown.value;
+            dynamicInput.innerHTML = '';
+
+            if (selectedContent === 'comments' || selectedContent == 'posts') {
+                const inputField = document.createElement('input');
+                inputField.type = 'text';
+                inputField.name = 'post_link';
+                inputField.placeholder = 'Enter Post Link';
+                dynamicInput.appendChild(inputField);
+            } 
+            else if (selectedContent === 'profile') {
+                const inputField = document.createElement('input');
+                inputField.type = 'text';
+                inputField.name = 'username';
+                inputField.placeholder = 'Enter Profile Username ';
+                dynamicInput.appendChild(inputField)
+            }
+            else if (selectedContent === 'pages' || selectedContent === 'profiles') {
+                const inputField = document.createElement('input');
+                inputField.type = 'text';
+                inputField.name = 'profile_name';
+                inputField.placeholder = 'Enter Profile/Page Name';
+                dynamicInput.appendChild(inputField);
+            }
+            else if (selectedContent === 'overview') {
+                const inputField = document.createElement('input');
+                inputField.type = 'text';
+                inputField.name = 'overview';
+                inputField.placeholder = 'Enter Profile Username';
+                dynamicInput.appendChild(inputField);
+            }
+        }
+
+        function displayScrapedData(data) {
+            const table = document.getElementById('scraped_data');
+            table.innerHTML = ''; // Clear previous data
+
+            if (data && data.length > 0) {
+                const headerRow = document.createElement('tr');
+                for (const key in data[0]) {
+                    const th = document.createElement('th');
+                    th.textContent = key;
+                    headerRow.appendChild(th);
+                }
+                table.appendChild(headerRow);
+
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    for (const key in item) {
+                        const cell = document.createElement('td');
+                        cell.textContent = item[key];
+                        row.appendChild(cell);
+                    }
+                    table.appendChild(row);
+                });
+
+                table.style.display = 'table';
+            } else {
+                table.style.display = 'none';
+            }
+        }
+        platformDropdown.addEventListener('change', () => {
+            updateContentOptions();
+            showInputFields();
+            document.getElementById('scraped_data').style.display = 'none'; 
+        });
+        contentTypeDropdown.addEventListener('change', showInputFields);
+        updateContentOptions();
+        showInputFields();
+    </script>
+</body>
+</html>

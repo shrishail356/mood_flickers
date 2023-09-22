@@ -1,0 +1,186 @@
+<html>
+<head>
+    <h1>Result</h1>
+    <link rel="stylesheet" href="{{ url_for('static', filename='result.css') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        /* CSS for hover effect */
+        li:hover {
+            background-color: #ddd;
+            cursor: pointer;
+        }
+
+        /* CSS for selected items */
+        .selected {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        /* CSS for buttons */
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* CSS for charts */
+        .chart-container {
+            display: none;
+        }
+
+        .chart-container.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <table style="width:100%">
+        <tr>
+            <th>SENTIMENT METRIC</th>
+            <th>SCORE</th>
+        </tr>
+        <tr>
+            <td>Positive</td>
+            <td>{{posi}}</td>
+        </tr>
+        <tr>
+            <td>Neutral</td>
+            <td>{{neut}}</td>
+        </tr>
+        <tr>
+            <td>Negative</td>
+            <td>{{nega}}</td>
+        </tr>
+    </table>
+
+    <button id="togglePositive" onclick="toggleWords('positive_list')">Toggle Positive Words</button>
+    <ul id="positive_list" style="display: none;">
+        {% for item in positive_list %}
+        <li class="interactive-item">{{ item }}</li>
+        {% endfor %}
+    </ul>
+
+    <button id="toggleNegative" onclick="toggleWords('negative_list')">Toggle Negative Words</button>
+    <ul id="negative_list" style="display: none;">
+        {% for item in negative_list %}
+        <li class="interactive-item">{{ item }}</li>
+        {% endfor %}
+    </ul>
+
+    <button id="toggleNeutral" onclick="toggleWords('neutral_list')">Toggle Neutral Words</button>
+    <ul id="neutral_list" style="display: none;">
+        {% for item in neutral_list %}
+        <li class="interactive-item">{{ item }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>The Overall Sentiment of the input is {{final}}</h3>
+
+    <h2>Graphs</h2>
+
+    <div class="chart-buttons">
+        <button class="chart-button" onclick="showChart('bar-chart')">Show Bar Chart</button>
+        <button class="chart-button" onclick="showChart('pie-chart')">Show Pie Chart</button>
+    </div>
+
+    <!-- Bar chart -->
+    <div id="bar-chart" class="chart-container">
+        <div style="height: 400px;"></div>
+    </div>
+
+    <!-- Pie chart -->
+    <div id="pie-chart" class="chart-container">
+        <div style="height: 400px;"></div>
+    </div>
+
+    <script>
+        // Extract data from Flask variables
+        var nega = {{ nega }};
+        var posi = {{ posi }};
+        var neut = {{ neut }};
+
+        // Create bar chart data and layout
+        var barData = [{
+            x: ['Negative', 'Positive', 'Neutral'],
+            y: [nega, posi, neut],
+            type: 'bar',
+            marker: {
+                color: ['red', 'green', 'blue']
+            },
+            text: [`${nega}%`, `${posi}%`, `${neut}%`], // Add percentage labels
+        }];
+
+        var barLayout = {
+            title: 'Sentiment Distribution',
+            xaxis: { title: 'Sentiment' },
+            yaxis: { title: 'Percentage' },
+            hovermode: 'closest', // Enable hover interactions
+        };
+
+        // Create pie chart data and layout
+        var pieData = [{
+            values: [nega, posi, neut],
+            labels: ['Negative', 'Positive', 'Neutral'],
+            type: 'pie',
+            marker: {
+                colors: ['red', 'green', 'blue']
+            },
+            textinfo: 'label+percent', // Show labels and percentages
+        }];
+
+        var pieLayout = {
+            title: 'Sentiment Distribution (Pie Chart)',
+            hovermode: 'closest', // Enable hover interactions
+        };
+
+        // Initialize charts
+        Plotly.newPlot('bar-chart', barData, barLayout);
+        Plotly.newPlot('pie-chart', pieData, pieLayout);
+
+        // JavaScript to toggle the visibility of word lists
+        function toggleWords(id) {
+            var list = document.getElementById(id);
+            var button = document.getElementById('toggle' + id);
+
+            if (list.style.display === 'none') {
+                list.style.display = 'block';
+                button.textContent = 'Hide ' + id.replace('_', ' ') + ' Words';
+            } else {
+                list.style.display = 'none';
+                button.textContent = 'Show ' + id.replace('_', ' ') + ' Words';
+            }
+        }
+
+        // JavaScript to show/hide charts
+        function showChart(chartId) {
+            var chart = document.getElementById(chartId);
+            var buttons = document.querySelectorAll('.chart-button');
+
+            buttons.forEach(button => {
+                if (button.id === chartId + '-button') {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+
+            var charts = document.querySelectorAll('.chart-container');
+
+            charts.forEach(c => {
+                c.style.display = 'none';
+            });
+
+            chart.style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>
