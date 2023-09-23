@@ -37,7 +37,7 @@ from nltk.collocations import BigramAssocMeasures, BigramCollocationFinder
 app = Flask(__name__, static_url_path='/static', static_folder='static')
 afinn = Afinn()
 instagram_client = ApifyClient("apify_api_ZPgkbd9Cnp424hni18t5uAzMHhz1ud2gBBhU")
-facebook_client = ApifyClient("apify_api_TREn6wGABw3ijaggDChucNKYPdwEvA3R4YLQ")
+facebook_client = ApifyClient("apify_api_ZPgkbd9Cnp424hni18t5uAzMHhz1ud2gBBhU")
 twitter_client = ApifyClient("apify_api_ZPgkbd9Cnp424hni18t5uAzMHhz1ud2gBBhU")
 
 @app.route('/')
@@ -50,10 +50,6 @@ def get_started():
         # Process the input from getstarted.html
         platform = request.form.get('platform')
         content_type = request.form.get('content_type')
-
-        # Your processing logic here
-
-        # After processing, you can redirect back to firstpage.html or any other page
         return redirect(url_for('index'))
 
     return render_template('getstarted.html')
@@ -534,7 +530,7 @@ def scrape():
                 "includeNestedComments": True,
                 "viewOption": "RANKED_UNFILTERED",
             }
-
+            facebook_client = ApifyClient("apify_api_PRAZWYzLFbyzAOlmFENSX6xsR9W17i33gMa8")
             run = facebook_client.actor("apify/facebook-comments-scraper").call(run_input=run_input)
 
             results_list = []
@@ -552,6 +548,7 @@ def scrape():
             for text_string in text_strings:
                 comment_container.append(text_string)
 
+            comment_string = ''.join(comment_container)
             words = comment_string.split()
 
             positive_words = []
