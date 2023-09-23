@@ -23,18 +23,18 @@ from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from wordcloud import WordCloud
-
+from afinn import Afinn
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('vader_lexicon')
 nltk.download('wordnet')
-
+nltk.download("afinn")
 import gensim
 from gensim import corpora
 from gensim.models.ldamodel import LdaModel
 
-from afinn import Afinn
-nltk.download("afinn")
+
+
 
 from nltk.collocations import BigramAssocMeasures, BigramCollocationFinder
 
