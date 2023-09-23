@@ -28,13 +28,9 @@ nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('vader_lexicon')
 nltk.download('wordnet')
-nltk.download("afinn")
 import gensim
 from gensim import corpora
 from gensim.models.ldamodel import LdaModel
-
-
-
 
 from nltk.collocations import BigramAssocMeasures, BigramCollocationFinder
 
