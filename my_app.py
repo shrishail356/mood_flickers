@@ -36,9 +36,9 @@ from nltk.collocations import BigramAssocMeasures, BigramCollocationFinder
 
 app = Flask(__name__, static_url_path='/static', static_folder='static')
 afinn = Afinn()
-instagram_client = ApifyClient("apify_api_N4DZvGN8WZEdODwNWsJa98aowAZ1030tPMLt")
+instagram_client = ApifyClient("apify_api_ZPgkbd9Cnp424hni18t5uAzMHhz1ud2gBBhU")
 facebook_client = ApifyClient("apify_api_TREn6wGABw3ijaggDChucNKYPdwEvA3R4YLQ")
-twitter_client = ApifyClient("apify_api_ynmJu16VrYLymosVbrV5CAVxK23CKH0uVVea")
+twitter_client = ApifyClient("apify_api_ZPgkbd9Cnp424hni18t5uAzMHhz1ud2gBBhU")
 
 @app.route('/')
 def index():
